@@ -55,13 +55,14 @@ def fjlt(A, k, q):
 
     # Apply hadamard transform to each row
     hda = np.apply_along_axis(fht.fht, 0, DA)
-
     # Apply P transform
     sample_size = npr.binomial(k * d, q)
     indc = fast_sample(k * d, sample_size)
     p_rows, p_cols = np.unravel_index(indc, (k, d))
     p_data = npr.normal(loc=0, scale=math.sqrt(1 / q), size=len(p_rows))
     P = sparse.csr_matrix((p_data, (p_rows, p_cols)), shape=(k, d_act))
+    print(hda.shape)
+    print(P.shape)
     return P.dot(hda)
 
 

@@ -2,22 +2,34 @@ import numpy as np
 from jlt import jlt
 from fjlt import fjlt
 from utils import utils
-from ese_jlt import ese_jlt
 from sklearn.decomposition import PCA
 
-"""
-A = np.random.randn(3, 5) * 100
-res = fjlt(A, 1, 0.5)
+
+n = 100
+d = 100000
+ep = 0.05
+delta = 0.05
+A = np.random.randn(n, d)
+# k = int(np.log(n)/ep**2) for fjlt
+k = int(16/ep**2 * np.log(1/delta))
+
+print("========== 1 ===========")
+
+res = jlt.ese_transform(A, 0.2, 0.05)
 
 print(res.shape)
+print(utils.measure_error(A, res))
 
-mean_along_row = A.mean(axis = 1).reshape((3, 1))
-F = A - mean_along_row
-FT = F.T
+del res
 
-print(mean_along_row)
-print(F)
-print(F @ FT)
+print("=====================")
+
+res = jlt.jlt_r(A, k)
+
+print(res.shape)
+print(utils.measure_error(A, res))
+
+del res
 """
 
 data = np.random.randn(1000, 100000)
@@ -49,3 +61,5 @@ p = pca.transform(data.transpose())
 print(pca.explained_variance_ratio_)
 print(int(np.log(n)))
 print(pca.components_.shape)
+
+"""
