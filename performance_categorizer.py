@@ -23,13 +23,12 @@ def create_cluster(k: int, n: int, d: int,  a: int, b:int, std: float = 1):
 def create_test_cluster(clusters_mean: np.ndarray, n_per_cluster: int, std):
     m, d = clusters_mean.shape
     clusters_test = np.empty(shape=(1, d))
-    labels = np.empty(shape=(1, 1))
+    labels = np.empty(shape=(1, 1), dtype=np.intc)
     for i in range(m):
         rand = np.random.normal(loc=0, scale=std, size=(n_per_cluster, d)) + clusters_mean[i, :]
         clusters_test = np.concatenate((clusters_test, rand))
-        print(labels.shape, np.full(shape=(n_per_cluster, 1), fill_value=i).shape)
         labels = np.concatenate((labels, np.full(shape=(n_per_cluster, 1), fill_value=i)))
-    return clusters_test[1:, :], labels[1:, :]
+    return clusters_test[1:, :], labels[1:, :].flatten()
 
 def rescale(data: np.ndarray):
     stds = data.std(axis=0)
@@ -46,43 +45,55 @@ def time_proc(f):
     res = f()
     return res, (time.perf_counter_ns() - start)/1e9
 
-def compute_accuracy(predicted: np.ndarray, label: np.ndarray, all_clusters: np.ndarray):
-    print(predicted.shape)
-    n, _ = predicted.reshape(-1, 1).shape
-    closest_all = np.empty(shape=(1, 1))
-    print(predicted.shape)
+
+
+def compute_accuracy(predicted: np.ndarray, all_clusters: np.ndarray, labels: np.ndarray):
+    n, d = predicted.shape
+    closest_all = np.empty(shape=(n,))
     for i in range(n):
-        print(predicted[i])
-        print(all_clusters)
-        dist_vec = predicted[i] - all_clusters
-        data_i = np.dot(dist_vec, dist_vec)
-        closest_all = np.concatenate((closest_all, np.argmin(data_i)))
-    return np.sum(closest_all[1] == label)
+        dir_vecs = predicted[i, :] - all_clusters
+        dist_vecs = np.sum(dir_vecs * dir_vecs, axis=1)
+        closest_all[i] = np.argmin(dist_vecs)
+    closest_all = closest_all.flatten()
+    return np.sum(closest_all == labels)
 
 def performance_test(n: int, a: int, b: int, std: int, k: int, dim_reduc_f):
+    print("===== Creating Training Cluster =====")
     clusters_train, clusters_means = create_cluster(k, n, d, a, b, std)
-    clusters_test, labels = create_test_cluster(clusters_means, 100, std)
+    print("===== Creating Test Cluster =====")
+    clusters_test, labels = create_test_cluster(clusters_means, n//k, std)
+    print("===== Testing =====")
     all_accuracy = []
-    print("===== now =====")
-    for i in range(1):
-        reduc, dim_reduc_time = time_proc(lambda: apply_dim_reduc(dim_reduc_f, np.concatenate((clusters_train, clusters_test))))
-        reduc_train, reduc_test = reduc[:n, :], reduc[n:, :]
-        model, _ = time_proc(lambda: KMeans(n_clusters=k).fit(reduc_train))
+    all_dim_reduc_time = []
+    all_train_time = []
+    all_dim = []
+    for i in range(3):
+        print(f"==== Iter {i} ====")
+        print("=== Applying Dimensionality Reduction ===")
+        reduc, dim_reduc_time = time_proc(lambda: apply_dim_reduc(dim_reduc_f, np.concatenate((clusters_train, clusters_test, clusters_means))))
+        reduc_train, reduc_test, reduc_means = reduc[:n, :], reduc[n:n+clusters_test.shape[0], :], reduc[n+clusters_test.shape[0]:, :]
+        print("=== Traning Model ===")
+        model, train_time = time_proc(lambda: KMeans(n_clusters=k).fit(reduc_train))
+        print("=== Predicting Model ===")
         predicted = model.predict(reduc_test)
-        score = compute_accuracy(predicted, actual)
-    return all_accuracy
+        print("=== Computing Accuracy ===")
+        all_accuracy.append(compute_accuracy(model.cluster_centers_[predicted], reduc_means, labels))
+        all_dim_reduc_time.append(dim_reduc_time)
+        all_train_time.append(train_time)
+        all_dim.append(reduc.shape[1])
+    return all_accuracy, all_dim_reduc_time, all_train_time, all_dim
 
-k = 2
+k = 100
 n = 10000
 d = 10000
-a = -1000
-b = 1000
+a = -10
+b = 10
 std = 10
-ep = 0.01
-de = 0.01
+ep = 0.5
+de = 0.5
 
-performance_test(n, a, b, std, k, lambda x: ese_transform(x, ep, de))
-
+res = performance_test(n, a, b, std, k, lambda x: ese_transform(x, ep, de))
+print(res)
 """
 clusters, means = create_cluster(k, n, d, a, b, std)
 print(clusters.shape)
