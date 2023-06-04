@@ -17,8 +17,8 @@ def create_one_cluster_with_mean(n_per_cluster: int, d: int, std:float, mean: np
     return np.random.normal(loc=0, scale=std, size=(n_per_cluster, d)) + mean
 
 def create_cluster(k: int, n: int, d: int,  a: int, b:int, std: float = 1):
-    means = np.random.uniform(high=b, low=a, size=(k, d)).repeat(repeats=n//k, axis=0)
-    clusters = np.random.normal(loc=0, scale=std, size=(n, d)) + means
+    means = np.random.uniform(high=b, low=a, size=(k, d))
+    clusters = np.random.normal(loc=0, scale=std, size=(n, d)) + means.repeat(repeats=n//k, axis=0)
     return clusters, means
 
 def create_test_cluster(clusters_mean: np.ndarray, n_per_cluster: int, std):
@@ -93,12 +93,12 @@ def performance_test_all(n: int, a: int, b: int, std: int, k: int, n_test_per_cl
         result.append(res)
     return result
 
-k = 100
-n = 10000
-d = 10000
+k = 10
+n = 1000
+d = 100000
 a = -100
 b = 100
-std = 500
+std = 10000
 ep = 0.1
 de = 0.1
 n_test_per_clus = 1
@@ -106,7 +106,7 @@ num_test = 1
 
 reduc_k = int(24/ep**2 * np.log(1/de))
 
-model = PCA(n_components=2000, svd_solver="auto")
+model = PCA(n_components=100, svd_solver="auto")
 funcs = [lambda x: ese_transform(x, ep, de), lambda x: jlt_r(x, reduc_k), lambda x: jlt(x, reduc_k), lambda x: model.fit_transform(x)]
 names = ["ese", "ran", "nor", "pca"]
 result = performance_test_all(n, a, b, std, k, n_test_per_clus, num_test, funcs)
