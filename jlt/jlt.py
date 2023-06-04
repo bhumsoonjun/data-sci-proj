@@ -25,10 +25,7 @@ def ese_transform(X, delta, epsilon):
     k = int((2 * np.log(n) - np.log(delta)) * np.log(d) / epsilon)
     h = np.random.choice(d, size=k, replace=True)
     sigma = np.random.choice([-1, 1], size=d)
-    R = csr_matrix((sigma[h], (h, range(k))), shape=(d, k))
-
-    del h
-    del sigma
+    R = csr_matrix((sigma[h], (h, range(k))), shape=(d, k)).toarray()
 
     return np.sqrt(d/k) * X @ R
 
