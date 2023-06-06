@@ -3,63 +3,28 @@ from jlt import jlt
 from fjlt import fjlt
 from utils import utils
 from sklearn.decomposition import PCA
+from performance_categorizer import performance_cat
+from jlt.jlt import *
 
+k = 10
+n = 1000
+d = 1000
+a = -100
+b = 100
+std = 10000
+ep = 0.1
+de = 0.1
+n_test_per_clus = 10
+num_test = 1
 
-n = 100
-d = 100000
-ep = 0.05
-delta = 0.05
-A = np.random.randn(n, d)
-# k = int(np.log(n)/ep**2) for fjlt
-k = int(16/ep**2 * np.log(1/delta))
+tester = performance_cat(n, d, a, b, std, k, n_test_per_clus, num_test)
 
-print("========== 1 ===========")
+reduc_k = int(24/ep**2 * np.log(1/de))
 
-res = jlt.ese_transform(A, 0.2, 0.05)
+model = PCA(n_components=100, svd_solver="full")
+funcs = [lambda x: ese_transform(x, ep, de), lambda x: jlt_r(x, reduc_k), lambda x: jlt(x, reduc_k), lambda x: model.fit_transform(x)]
+names = ["ese", "ran", "nor", "pca"]
+result = tester.performance_test_all(funcs)
 
-print(res.shape)
-print(utils.measure_error(A, res))
-
-del res
-
-print("=====================")
-
-res = jlt.jlt_r(A, k)
-
-print(res.shape)
-print(utils.measure_error(A, res))
-
-del res
-"""
-
-data = np.random.randn(1000, 100000)
-print("========")
-n, d = data.shape
-ep = 0.3
-k = int(24 / (ep ** 2) * np.log(n))
-proj = ese_jlt.ese_transform(data, 0.05, 0.05)
-print(k)
-print(proj)
-print(proj.shape)
-# print(utils.measure_error(data, proj))
-
-print("==== 2 ====")
-
-proj = jlt.jlt_r(data, k)
-#  print(utils.measure_error(data, proj))
-
-print("==== 2 ====")
-
-proj = jlt.jlt(data, k)
-#  print(utils.measure_error(data, proj))
-
-print("=================")
-pca = PCA(n_components=10, svd_solver="full")
-pca.fit(data.transpose())
-print(pca.get_precision())
-p = pca.transform(data.transpose())
-print(pca.explained_variance_ratio_)
-print(int(np.log(n)))
-print(pca.components_.shape)
-
-"""
+for res, name in zip(result, names):
+    print(name, res)
