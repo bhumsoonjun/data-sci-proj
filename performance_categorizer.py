@@ -101,12 +101,12 @@ b = 100
 std = 10000
 ep = 0.1
 de = 0.1
-n_test_per_clus = 1
+n_test_per_clus = 10
 num_test = 1
 
 reduc_k = int(24/ep**2 * np.log(1/de))
 
-model = PCA(n_components=100, svd_solver="auto")
+model = PCA(n_components=100, svd_solver="full")
 funcs = [lambda x: ese_transform(x, ep, de), lambda x: jlt_r(x, reduc_k), lambda x: jlt(x, reduc_k), lambda x: model.fit_transform(x)]
 names = ["ese", "ran", "nor", "pca"]
 result = performance_test_all(n, a, b, std, k, n_test_per_clus, num_test, funcs)
