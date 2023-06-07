@@ -7,6 +7,7 @@ class stats:
     dim_reduc_method_name: str
     dim_reduc_params: Dict[str, Any]
     dim_reduc_time: float
+    train_time: float
     accuracy: float
 
     ori_stds_sum: float

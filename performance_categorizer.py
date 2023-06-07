@@ -10,6 +10,9 @@ from sklearn.cluster import KMeans
 from jlt.jlt import *
 from dataclasses import dataclass
 
+from stats import stats
+
+
 @dataclass(init=True, repr=True)
 class performance_cat:
 
@@ -17,8 +20,8 @@ class performance_cat:
     d: int
     a: int
     b: int
-    std: int
-    k: int
+    cluster_std: int
+    num_clusters: int
     n_test_per_cluster: int
     num_test: int
 
@@ -36,8 +39,7 @@ class performance_cat:
 
     def _create_test_cluster(self, clusters_mean: np.ndarray, n_per_cluster: int, std):
         n, d = clusters_mean.shape
-        clusters_test = np.random.normal(loc=0, scale=std, size=(n * n_per_cluster, d)) + clusters_mean.repeat(
-            repeats=n_per_cluster, axis=0)
+        clusters_test = np.random.normal(loc=0, scale=std, size=(n * n_per_cluster, d)) + clusters_mean.repeat(repeats=n_per_cluster, axis=0)
         labels = np.arange(n).repeat(repeats=n_per_cluster)
         return clusters_test, labels.flatten()
 
@@ -66,9 +68,9 @@ class performance_cat:
 
     def _create_test_data(self):
         print("===== Creating Training Cluster =====")
-        clusters_train, clusters_means = self._create_cluster(self.k, self.n, self.d, self.a, self.b, self.std)
+        clusters_train, clusters_means = self._create_cluster(self.num_clusters, self.n, self.d, self.a, self.b, self.cluster_std)
         print("===== Creating Test Cluster =====")
-        clusters_test, labels = self._create_test_cluster(clusters_means, self.n_test_per_cluster, self.std)
+        clusters_test, labels = self._create_test_cluster(clusters_means, self.n_test_per_cluster, self.cluster_std)
         return clusters_train, clusters_means, clusters_test, labels
 
     def _get_data_stats(self, data: np.ndarray):
@@ -97,7 +99,7 @@ class performance_cat:
             reduc, dim_reduc_time = self._time_proc(lambda: self._apply_dim_reduc(dim_reduc_f, np.concatenate((clusters_train, clusters_test, clusters_means))))
             reduc_train, reduc_test, reduc_means = reduc[:self.n, :], reduc[self.n:self.n + clusters_test.shape[0], :], reduc[self.n + clusters_test.shape[0]:,:]
             print("=== Traning Model ===")
-            model, train_time = self._time_proc(lambda: KMeans(n_clusters=self.k).fit(reduc_train))
+            model, train_time = self._time_proc(lambda: KMeans(n_clusters=self.num_clusters).fit(reduc_train))
             print("=== Predicting Model ===")
             predicted = model.predict(reduc_test)
             predicted_actual = model.predict(reduc_means)
@@ -108,11 +110,17 @@ class performance_cat:
             all_trans_stats.append(self._get_data_stats(reduc_train))
         return all_accuracy, all_dim_reduc_time, all_train_time, all_trans_stats
 
-    def performance_test_all(self, dim_reduc_f):
+    def performance_test_all(self, names, dim_reduc_f, params):
         clusters_train, clusters_means, clusters_test, labels = self._create_test_data()
+        ori_stds_sum, ori_stds_mean, ori_shape = self._get_data_stats(clusters_train)
         result = []
-        for func in dim_reduc_f:
-            res = self._performance_test_one_func(clusters_train, clusters_means, clusters_test, self.num_test, self.n_test_per_cluster,func)
-            result.append(res)
+        for name, func, param in zip(names, dim_reduc_f, params):
+            all_accuracy, all_dim_reduc_time, all_train_time, all_trans_stats = self._performance_test_one_func(clusters_train, clusters_means, clusters_test, self.num_test, self.n_test_per_cluster, func)
+            four_ways = zip(all_accuracy, all_dim_reduc_time, all_train_time, all_trans_stats)
+            for tup in four_ways:
+                acc, reduc_time, train_time, trans_stats = tup
+                trans_stds_sum, trans_stds_mean, trans_shape = trans_stats
+                stat = stats(name, param, reduc_time, train_time, acc, ori_stds_sum, ori_stds_mean, ori_shape, trans_stds_sum, trans_stds_mean, trans_shape, self.num_clusters, self.a, self.b, self.cluster_std)
+                result.append(stat)
         return result
 

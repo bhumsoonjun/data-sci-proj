@@ -25,7 +25,7 @@ def ese_transform(X, delta, epsilon):
     k = int((2 * np.log(n) - np.log(delta)) * np.log(d) / epsilon)
     h = np.random.choice(d, size=k, replace=True)
     sigma = np.random.choice([-1, 1], size=d)
-    R = csr_matrix((sigma[h], (h, range(k))), shape=(d, k)).toarray()
+    R = csr_matrix((sigma[h], (h, range(k))), shape=(d, k))
 
     return np.sqrt(d/k) * X @ R
 
@@ -78,7 +78,6 @@ def fjlt(A, k, q):
     DA[0:d, :] = A * D
 
     # Apply hadamard transform to each row
-    print(DA.shape)
     hda = np.apply_along_axis(fht.fht, 0, DA)
 
     P_ber = np.random.choice([1, 0], size=(k, d_act), p=[q, 1 - q])
@@ -86,8 +85,6 @@ def fjlt(A, k, q):
     num_samples = ind[0].shape[0]
     sample = np.random.normal(0, 1/q, num_samples)
     P = csr_matrix((sample, (ind[0], ind[1])), shape=(k, d_act))
-    print(hda.shape)
-    print(P.shape)
     return P.dot(hda)
 
 
