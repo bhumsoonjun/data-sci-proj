@@ -27,3 +27,4 @@ class kmeans_performance_test:
         return np.sum(predicted == predicted_actual.repeat(repeats=n_test_per_cluster)) / predicted.shape[0]
 
     def test(self):
+        pass
