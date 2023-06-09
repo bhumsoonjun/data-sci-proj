@@ -10,9 +10,3 @@ class performance_test_data:
         self.training_label: np.ndarray = training_label
         self.characterstics: dict = characteristics
 
-    def _get_data_stats(self, data: np.ndarray):
-        stds = data.std(axis=1)
-        stds_sum = stds.sum()
-        stds_mean = stds.mean()
-        shape = data.shape
-        return stds_sum, stds_mean, shape

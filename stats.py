@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import numpy as np
 from typing import *
-
+from data_stats import *
 @dataclass(init=True, repr=True)
 class stats:
     dim_reduc_method_name: str
@@ -10,15 +10,7 @@ class stats:
     train_time: float
     accuracy: float
 
-    ori_stds_sum: float
-    ori_stds_mean: float
-    ori_shape: Tuple[int, int]
+    original_data_stats: data_stats
+    transformed_data_stats: data_stats
 
-    trans_stds_sum: float
-    trans_stds_mean: float
-    trans_shape: Tuple[int, int]
-
-    num_clusters: int
-    a: int
-    b: int
-    cluster_std: float
+    characteristics: dict

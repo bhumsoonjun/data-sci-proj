@@ -1,5 +1,6 @@
 from typing import *
 import numpy as np
+from performance_test_data import *
 
 class clusters_generator:
 
@@ -20,6 +21,14 @@ class clusters_generator:
         self.cluster_std = cluster_std
         self.num_clusters = num_clusters
         self.n_test_per_cluster = n_test_per_cluster
+        self.characteristics = {
+            "n": n,
+            "d": d,
+            "a": a,
+            "b": b,
+            "cluster_std": cluster_std,
+            "num_clusters": num_clusters
+        }
 
     def _create_one_cluster(self, n_par: int, d: int, a: int, b: int, std: float = 1):
         rand_mean = np.random.uniform(high=b, low=a, size=(1, d))
@@ -39,12 +48,12 @@ class clusters_generator:
         labels = np.arange(n).repeat(repeats=n_per_cluster)
         return clusters_test, labels.flatten()
 
-    def _create_test_data(self):
+    def _create_test_data(self) -> performance_test_data:
         print("===== Creating Training Cluster =====")
         clusters_train, clusters_means = self._create_cluster(self.num_clusters, self.n, self.d, self.a, self.b, self.cluster_std)
         print("===== Creating Test Cluster =====")
         clusters_test, labels = self._create_test_cluster(clusters_means, self.n_test_per_cluster, self.cluster_std)
-        return clusters_train, clusters_means, clusters_test, labels
+        return performance_test_data(clusters_train, clusters_means, clusters_test, labels, self.characteristics)
 
-    def generate(self):
+    def generate(self) -> performance_test_data:
         return self._create_test_data()

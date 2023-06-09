@@ -13,4 +13,3 @@ def measure_error(original: np.ndarray, processed: np.ndarray):
     D_pro = g_pro @ np.ones(shape=(n,1)) + np.ones(shape=(1, n)) @ g_pro - 2*g_pro
 
     return np.abs(np.sum(np.sqrt(D_ori)) - np.sum(np.sqrt(D_pro)))
-
