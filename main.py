@@ -6,8 +6,8 @@ from sklearn.decomposition import PCA
 from performance_categorizer import performance_cat
 from jlt.jlt import *
 
-k = 100
-n = 10000
+k = 10
+n = 100
 d = 100000
 a = -1000
 b = 1000
@@ -25,7 +25,7 @@ n_components = 2100
 svd_solver = "auto"
 model = PCA(n_components=n_components, svd_solver=svd_solver)
 
-funcs = [lambda x: ese_transform(x, ep, de), lambda x: jlt_r(x, reduc_k), lambda x: jlt(x, reduc_k), lambda x: model.fit_transform(x)]
+funcs = [lambda x: jlt_ese(x, ep, de), lambda x: jlt_r(x, reduc_k), lambda x: jlt(x, reduc_k), lambda x: model.fit_transform(x)]
 names = ["ese", "ran", "nor", "pca"]
 params = [{"ep": ep, "de": de}, {"ep": ep, "de": de}, {"ep": ep, "de": de}, {"n_components": n_components, "svd_solver": svd_solver}]
 result = tester.performance_test_all(names, funcs, params)

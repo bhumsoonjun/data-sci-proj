@@ -20,7 +20,7 @@ def jlt_r(data: np.ndarray, k: int) -> np.ndarray:
     proj_mat = np.sqrt(s/k) * np.random.choice([1, 0, -1], p=[1/(2*s),1 - 1/s, 1/(2*s)], size=(d, k))
     return data @ proj_mat
 
-def ese_transform(X, delta, epsilon):
+def jlt_ese(X, delta, epsilon):
     n, d = X.shape
     k = int((2 * np.log(n) - np.log(delta)) * np.log(d) / epsilon)
     h = np.random.choice(d, size=k, replace=True)

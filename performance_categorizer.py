@@ -9,39 +9,19 @@ from sklearn.model_selection import train_test_split
 from sklearn.cluster import KMeans
 from jlt.jlt import *
 from dataclasses import dataclass
-
+from performance_test_data import *
 from stats import stats
 
 
-@dataclass(init=True, repr=True)
 class performance_cat:
 
-    n: int
-    d: int
-    a: int
-    b: int
-    cluster_std: int
-    num_clusters: int
-    n_test_per_cluster: int
-    num_test: int
-
-    def _create_one_cluster(self, n_par: int, d: int, a: int, b: int, std: float = 1):
-        rand_mean = np.random.uniform(high=b, low=a, size=(1, d))
-        return np.random.normal(loc=0, scale=std, size=(n_par, d)) + rand_mean, rand_mean
-
-    def _create_one_cluster_with_mean(self, n_per_cluster: int, d: int, std: float, mean: np.ndarray):
-        return np.random.normal(loc=0, scale=std, size=(n_per_cluster, d)) + mean
-
-    def _create_cluster(self, k: int, n: int, d: int, a: int, b: int, std: float = 1):
-        means = np.random.uniform(high=b, low=a, size=(k, d))
-        clusters = np.random.normal(loc=0, scale=std, size=(n, d)) + means.repeat(repeats=n // k, axis=0)
-        return clusters, means
-
-    def _create_test_cluster(self, clusters_mean: np.ndarray, n_per_cluster: int, std):
-        n, d = clusters_mean.shape
-        clusters_test = np.random.normal(loc=0, scale=std, size=(n * n_per_cluster, d)) + clusters_mean.repeat(repeats=n_per_cluster, axis=0)
-        labels = np.arange(n).repeat(repeats=n_per_cluster)
-        return clusters_test, labels.flatten()
+    def __init__(self, data_tag: performance_test_data, num_test):
+        self.data_tag = data_tag
+        self.training_data = data_tag.training_data
+        self.training_label = data_tag.training_label
+        self.testing_data = data_tag.testing_data
+        self.testing_label = data_tag.testing_label
+        self.num_test = num_test
 
     def _rescale(self, data: np.ndarray):
         stds = data.std(axis=0)
@@ -65,20 +45,6 @@ class performance_cat:
 
     def _compute_accuracy(self, predicted: np.ndarray, predicted_actual: np.ndarray, n_test_per_cluster: int):
         return np.sum(predicted == predicted_actual.repeat(repeats=n_test_per_cluster)) / predicted.shape[0]
-
-    def _create_test_data(self):
-        print("===== Creating Training Cluster =====")
-        clusters_train, clusters_means = self._create_cluster(self.num_clusters, self.n, self.d, self.a, self.b, self.cluster_std)
-        print("===== Creating Test Cluster =====")
-        clusters_test, labels = self._create_test_cluster(clusters_means, self.n_test_per_cluster, self.cluster_std)
-        return clusters_train, clusters_means, clusters_test, labels
-
-    def _get_data_stats(self, data: np.ndarray):
-        stds = data.std(axis=1)
-        stds_sum = stds.sum()
-        stds_mean = stds.mean()
-        shape = data.shape
-        return stds_sum, stds_mean, shape
 
     def _performance_test_one_func(
             self,
