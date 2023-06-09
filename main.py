@@ -1,16 +1,17 @@
-from jlt import jlt
 from sklearn.decomposition import PCA
-from performance_categorizer import *
-from jlt.jlt import *
+
 from clusters_generator import *
 from dim_reduc_function import *
+from jlt import jlt
+from jlt.jlt import *
 from kmeans_model import *
+from performance_categorizer import *
 
-n = 10000
+n = 1000
 d = 10000
 a = -100
 b = 100
-cluster_std = 350
+cluster_std = 1000
 num_cluster = 10
 ep = 0.1
 de = 0.1
@@ -19,7 +20,7 @@ num_test = 1
 
 reduc_k = int(24/ep**2 * np.log(1/de))
 
-n_components = 100
+n_components = 1000
 svd_solver = "auto"
 model = PCA(n_components=n_components, svd_solver=svd_solver)
 

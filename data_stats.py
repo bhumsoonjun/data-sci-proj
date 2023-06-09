@@ -1,7 +1,15 @@
 from typing import *
 import numpy as np
+from dataclasses import *
 
+
+@dataclass(repr=True)
 class data_stats:
+
+    stds_sum: float
+    stds_mean: float
+    shape: Any
+    sparsity: float
 
     def __init__(self, data: np.ndarray):
         self.stds = data.std(axis=1)
