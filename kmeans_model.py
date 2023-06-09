@@ -1,6 +1,8 @@
 from typing import *
 import numpy as np
 import sklearn as sk
+import sklearn.cluster
+
 from performance_test_data import *
 from performance_test_model import *
 class kmeans_model(performance_test_model):
@@ -14,7 +16,7 @@ class kmeans_model(performance_test_model):
         self.n = None
         self.num_cluster = None
         self.n_test_per_cluster = None
-        self.model = None
+        self.model: sklearn.cluster.KMeans = None
 
         self.reduc_clusters_train = None
         self.reduc_clusters_means = None
@@ -28,8 +30,8 @@ class kmeans_model(performance_test_model):
 
         self.n = self.clusters_train.shape[0]
         self.num_cluster = self.clusters_means.shape[0]
-        self.n_test_per_cluster = self.clusters_test // self.num_cluster
-        self.model = sk.cluster.KMeans(n_clusters=self.num_cluster.shape)
+        self.n_test_per_cluster = self.clusters_test.shape[0] // self.num_cluster
+        self.model: sklearn.cluster.KMeans = sk.cluster.KMeans(n_clusters=self.num_cluster)
 
         self.reduc_clusters_train = None
         self.reduc_clusters_means = None
@@ -47,5 +49,5 @@ class kmeans_model(performance_test_model):
 
     def compute_accuracy(self):
         predicted = self.model.predict(self.reduc_clusters_test)
-        predicted_actual = self.model.transform(self.clusters_means)
-        return np.sum(predicted == predicted_actual.repeat(repeats=self.n_test_per_cluster)) / predicted.shape[0]
+        predicted_actual = self.model.predict(self.reduc_clusters_means).repeat(repeats=self.n_test_per_cluster)
+        return np.sum(predicted == predicted_actual) / predicted.shape[0]

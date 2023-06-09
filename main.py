@@ -6,11 +6,11 @@ from clusters_generator import *
 from dim_reduc_function import *
 from kmeans_model import *
 
-n = 100
-d = 100000
-a = -1000
-b = 1000
-cluster_std = 550
+n = 10000
+d = 10000
+a = -100
+b = 100
+cluster_std = 350
 num_cluster = 10
 ep = 0.1
 de = 0.1
