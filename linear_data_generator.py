@@ -35,13 +35,22 @@ class linear_data_generator:
     def func(self, x: np.ndarray, w: np.ndarray, b: float):
         return x @ w + b
 
+    def _project_onto(self, x: np.ndarray):
+        amount = int(0.05 * x.shape[1])
+        possible = np.arange(self.d - 1)
+        index = np.random.choice(possible, size=(amount,), replace=False)
+        cov_col = np.random.choice(np.setdiff1d(possible, index), size=(amount,), replace=False)
+        masks = np.random.uniform(low=-np.sqrt(self.coeff_range), high=np.sqrt(self.coeff_range), size=(amount,))
+        x[:, index] = x[:, cov_col] + x[:, index] * masks
+        return x
+
+
     def _make_related(self, x: np.ndarray):
-        amount = int(0.2 * x.shape[1])
+        amount = int(0.05 * x.shape[1])
         possible = np.arange(self.d - 1)
         index = np.random.choice(possible, size=(amount,), replace=False)
         cov_col = np.random.choice(np.setdiff1d(possible, index), size=(amount,), replace=False)
         masks = np.random.uniform(low=-self.coeff_range, high=self.coeff_range, size=(amount,))
-        print(masks)
         x[:, index] = x[:, cov_col] * masks
         return x
 
@@ -53,7 +62,7 @@ class linear_data_generator:
         w = random_coeffs[:-1].reshape(-1, 1)
         b = random_coeffs[-1]
         x = np.random.uniform(low=-self.x_range, high=self.x_range, size=(self.n, self.d - 1)) * mask_family
-        x = self._make_related(x)
+        x = self._project_onto(self._make_related(x))
         y = self.func(x, w, b) + np.random.normal(scale=self.std, size=(self.n, 1))
 
         x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, test_size=0.2)

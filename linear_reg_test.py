@@ -13,20 +13,20 @@ from linear_data_generator import *
 from regression_model import *
 
 n = 10000
-d = 10000
+d = 100000
 x_range = 10000
-coeff_range = 1000
-std = 100
-sparsity = 0.1
+coeff_range = 100
+std = 10
+sparsity = 0.01
 num_test = 1
 
 """ DIM REDUC SETTINGS """
 
-ep = 0.05
-de = 0.05
+ep = 0.1
+de = 0.1
 reduc_k = int(24/ep**2 * np.log(1/de))
 
-n_components = 1000
+n_components = 3
 
 svd_solver = "auto"
 model = PCA(n_components=n_components, svd_solver=svd_solver)
