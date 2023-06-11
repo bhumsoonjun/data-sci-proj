@@ -9,21 +9,21 @@ from performance_categorizer import *
 import pandas as pd
 from scipy.io.arff import loadarff
 from health_news_parser import *
+from linear_data_generator import *
+from regression_model import *
 
-n = 1000
+n = 10000
 d = 10000
-a = -100
-b = 100
-cluster_std = 1000
-num_cluster = 10
-n_test_per_clus = 10
+x_range = 10000
+coeff_range = 1000
+std = 100
+sparsity = 0.1
 num_test = 1
-sparsity = 0.9
 
 """ DIM REDUC SETTINGS """
 
-ep = 0.5
-de = 0.5
+ep = 0.05
+de = 0.05
 reduc_k = int(24/ep**2 * np.log(1/de))
 
 n_components = 1000
@@ -37,21 +37,19 @@ ese_jlt = dim_reduc_function("extremely sprase JL transform", lambda x: jlt_ese(
 random_jlt = dim_reduc_function("sparse JL transform", lambda x: jlt_r(x, reduc_k), {"ep": ep, "de": de})
 n_jlt = dim_reduc_function("JL transform", lambda x: jlt(x, reduc_k), {"ep": ep, "de": de})
 pca = dim_reduc_function("PCA", lambda x: model.fit_transform(x),  {"n_components": n_components, "svd_solver": svd_solver})
-
-funcs = [ese_jlt, random_jlt, n_jlt, pca]
+blank = dim_reduc_function("Nothing", lambda x: x, {})
+funcs = [ese_jlt, pca, blank]
 
 """ MODEL """
 
-kmeans = kmeans_model()
+reg = regression_model()
 
 """ DATA """
-# cg = clusters_generator(n, d, a, b, cluster_std, num_cluster, n_test_per_clus, sparsity)
-# performance_test_data = cg.generate()
-
-performance_test_data = load_health_news(3)
+gen = linear_data_generator(n, d, x_range, coeff_range, std, sparsity)
+data = gen.generate()
 
 tester = performance_cat(num_test)
-results = tester.performance_test_all(performance_test_data, kmeans, funcs)
+results = tester.performance_test_all(data, reg, funcs)
 
 for res in results:
     print(res)
