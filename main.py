@@ -19,6 +19,7 @@ ep = 0.1
 de = 0.1
 n_test_per_clus = 10
 num_test = 1
+sparsity = 0.9
 
 reduc_k = int(24/ep**2 * np.log(1/de))
 
@@ -40,7 +41,7 @@ funcs = [ese_jlt, random_jlt, n_jlt, pca]
 kmeans = kmeans_model()
 
 """ DATA """
-cg = clusters_generator(n, d, a, b, cluster_std, num_cluster, n_test_per_clus)
+cg = clusters_generator(n, d, a, b, cluster_std, num_cluster, n_test_per_clus, sparsity)
 performance_test_data = cg.generate()
 
 tester = performance_cat(num_test)
