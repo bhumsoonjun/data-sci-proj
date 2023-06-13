@@ -11,6 +11,9 @@ from scipy.io.arff import loadarff
 from health_news_parser import *
 from linear_data_generator import *
 from regression_model import *
+from pandas_template import *
+
+""" DATA GENERATION SETTINGS """
 
 n = 100
 d = 1000
@@ -18,40 +21,37 @@ x_range = 10000
 coeff_range = 100
 std = 10
 sparsity = 0.99
-num_test = 10
+num_test_total = 10
 
 """ DIM REDUC SETTINGS """
 
-ep = 0.3
+ep = 0.9
 de = 0.1
-reduc_k = int(24/ep**2 * np.log(1/de))
-
-print(reduc_k)
-
+instance_num = 2
 n_components = 99
 
 svd_solver = "auto"
 model = PCA(n_components=n_components, svd_solver=svd_solver)
 
+""" General Settings """
+
+output_path = f"output/lin_reg_{ep}_{de}_{instance_num}"
+
 """ FUNCS """
 
-ese_jlt = dim_reduc_function("extremely sprase JL transform", lambda x: jlt_ese(x, ep, de), {"ep": ep, "de": de})
-random_jlt = dim_reduc_function("sparse JL transform", lambda x: jlt_r(x, reduc_k), {"ep": ep, "de": de})
-n_jlt = dim_reduc_function("JL transform", lambda x: jlt(x, reduc_k), {"ep": ep, "de": de})
-pca = dim_reduc_function("PCA", lambda x: model.fit_transform(x),  {"n_components": n_components, "svd_solver": svd_solver})
-blank = dim_reduc_function("Nothing", lambda x: x, {})
-funcs = [ese_jlt, random_jlt, n_jlt, pca]
+ese_jlt = dim_reduc_function("extremely sparse JL transform", lambda x: jlt_ese(x, ep, de), {"ep": ep, "de": de}, instance_num)
+random_jlt = dim_reduc_function("sparse JL transform", lambda x: jlt_r(x, ep, de), {"ep": ep, "de": de}, instance_num)
+n_jlt = dim_reduc_function("JL transform", lambda x: jlt(x, ep, de), {"ep": ep, "de": de}, instance_num)
+pca = dim_reduc_function("PCA", lambda x: model.fit_transform(x),  {"n_components": n_components, "svd_solver": svd_solver}, instance_num)
+blank = dim_reduc_function("Nothing", lambda x: x, {}, instance_num)
+funcs = [ese_jlt, random_jlt, n_jlt, pca, blank]
+num_test_funcs = [10, 10, 10, 10, 1]
 
-""" MODEL """
-
-reg = regression_model()
-
-""" DATA """
-gen = linear_data_generator(n, d, x_range, coeff_range, std, sparsity)
-data = gen.generate()
-
-tester = performance_cat(num_test)
-results = tester.performance_test_all(data, reg, funcs)
-
-for res in results:
-    print(res)
+for i in range(num_test_total):
+    reg = regression_model()
+    gen = linear_data_generator(n, d, x_range, coeff_range, std, sparsity)
+    data = gen.generate()
+    tester = performance_cat()
+    results = tester.performance_test_all(data, reg, funcs, num_test_funcs)
+    dataframe = inject_into_dataframe(results)
+    dataframe.to_csv(output_path, index=False, mode='a')

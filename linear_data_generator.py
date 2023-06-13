@@ -17,7 +17,7 @@ class linear_data_generator:
         self.n = n
         self.d = d
         self.x_range = x_range
-        self.coeff_range =coeff_range
+        self.coeff_range = coeff_range
         self.std = std
         self.sparsity = sparsity
         self.characteristics = {
@@ -75,7 +75,7 @@ class linear_data_generator:
         y = self.func(x, w, b) + np.random.normal(scale=self.std, size=(self.n, 1))
 
         x_train, x_test, y_train, y_test = train_test_split(x, y, shuffle=True, test_size=0.2)
-        return performance_test_data(training_data=x_train, training_label=y_train, testing_data=x_test, testing_label=y_test)
+        return performance_test_data(training_data=x_train, training_label=y_train, testing_data=x_test, testing_label=y_test, characteristics=self.characteristics)
 
     def generate(self) -> performance_test_data:
         return self._create_test_data()

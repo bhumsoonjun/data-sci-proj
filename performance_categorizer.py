@@ -5,7 +5,7 @@ from typing import *
 import time
 from sklearn.cluster import KMeans
 from performance_test_data import *
-from stats import stats
+from test_result import test_result
 from performance_test_model import *
 from dim_reduc_function import *
 from utils import *
@@ -13,9 +13,6 @@ from data_stats import  *
 
 
 class performance_cat:
-
-    def __init__(self, num_test: int):
-        self.num_test = num_test
 
     def _rescale(self, data: np.ndarray):
         stds = data.std(axis=0)
@@ -41,7 +38,8 @@ class performance_cat:
             self,
             data: performance_test_data,
             model: performance_test_model,
-            dim_reduc_f: dim_reduc_function
+            dim_reduc_f: dim_reduc_function,
+            num_test: int
     ):
         all_accuracy = []
         all_dim_reduc_time = []
@@ -50,7 +48,7 @@ class performance_cat:
 
         model.initialize(data)
 
-        for i in range(self.num_test):
+        for i in range(num_test):
             print(f"==== Iter {i} ====")
             print("=== Applying Dimensionality Reduction ===")
 
@@ -67,14 +65,16 @@ class performance_cat:
 
         return all_accuracy, all_dim_reduc_time, all_train_time, all_trans_stats
 
-    def performance_test_all(self, data: performance_test_data, model: performance_test_model, dim_reduc_functions: List[dim_reduc_function]):
+    def performance_test_all(self, data: performance_test_data, model: performance_test_model, dim_reduc_functions: List[dim_reduc_function], num_test_funcs: List[int]):
         original_data_stats = data_stats(data.training_data)
         result = []
-        for func in dim_reduc_functions:
-            all_accuracy, all_dim_reduc_time, all_train_time, all_trans_stats = self._performance_test_one_func(data, model, func)
-            four_ways = zip(all_accuracy, all_dim_reduc_time, all_train_time, all_trans_stats)
-            for acc, reduc_time, train_time, trans_stats in four_ways:
-                stat = stats(
+        for func, num_test in zip(dim_reduc_functions, num_test_funcs):
+            all_accuracy, all_dim_reduc_time, all_train_time, all_trans_stats = self._performance_test_one_func(data, model, func, num_test)
+            five_ways = zip(all_accuracy, all_dim_reduc_time, all_train_time, all_trans_stats, [i for i in range(num_test)])
+            for acc, reduc_time, train_time, trans_stats, i in five_ways:
+                stat = test_result(
+                    func.instance_num,
+                    i,
                     func.name,
                     func.params,
                     reduc_time,
