@@ -12,21 +12,23 @@ from health_news_parser import *
 from linear_data_generator import *
 from regression_model import *
 
-n = 10000
-d = 100000
+n = 100
+d = 1000
 x_range = 10000
 coeff_range = 100
 std = 10
-sparsity = 0.01
-num_test = 1
+sparsity = 0.99
+num_test = 10
 
 """ DIM REDUC SETTINGS """
 
-ep = 0.1
+ep = 0.3
 de = 0.1
 reduc_k = int(24/ep**2 * np.log(1/de))
 
-n_components = 3
+print(reduc_k)
+
+n_components = 99
 
 svd_solver = "auto"
 model = PCA(n_components=n_components, svd_solver=svd_solver)
@@ -38,7 +40,7 @@ random_jlt = dim_reduc_function("sparse JL transform", lambda x: jlt_r(x, reduc_
 n_jlt = dim_reduc_function("JL transform", lambda x: jlt(x, reduc_k), {"ep": ep, "de": de})
 pca = dim_reduc_function("PCA", lambda x: model.fit_transform(x),  {"n_components": n_components, "svd_solver": svd_solver})
 blank = dim_reduc_function("Nothing", lambda x: x, {})
-funcs = [ese_jlt, pca, blank]
+funcs = [ese_jlt, random_jlt, n_jlt, pca]
 
 """ MODEL """
 

@@ -1,1 +1,7 @@
 PCA is bad when the data contains lot of noise (high std ~ 500)
+
+
+
+LIN REG
+
+Ese bad for lin reg ~ linear map too sparse, the matrix is not full rank ~ most infor is mapped to null space

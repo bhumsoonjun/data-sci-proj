@@ -32,6 +32,15 @@ class linear_data_generator:
     def _create_one_sparse_mask(self) -> np.ndarray:
         return np.random.binomial(1, np.array([1 - self.sparsity]).repeat(repeats=self.d - 1))
 
+    def _create_sparse_mask_family(self):
+        amount = int(1/(1 - self.sparsity) + 0.5)
+        masks = np.array(list(map(lambda _: self._create_one_sparse_mask(), [i for i in range(amount)])))
+        return masks
+
+    def _make_sparse(self, data: np.ndarray, masks: np.ndarray) -> np.ndarray:
+        chosen = np.random.randint(low=0, high=masks.shape[0], size=(data.shape[0],))
+        return data * masks[chosen, :]
+
     def func(self, x: np.ndarray, w: np.ndarray, b: float):
         return x @ w + b
 
@@ -56,12 +65,12 @@ class linear_data_generator:
 
 
     def _create_test_data(self):
-        mask_family = self._create_one_sparse_mask()
+        mask_family = self._create_sparse_mask_family()
         random_coeffs = np.random.uniform(low=-self.coeff_range, high=self.coeff_range, size=(self.d, ))
 
         w = random_coeffs[:-1].reshape(-1, 1)
         b = random_coeffs[-1]
-        x = np.random.uniform(low=-self.x_range, high=self.x_range, size=(self.n, self.d - 1)) * mask_family
+        x = self._make_sparse(np.random.uniform(low=-self.x_range, high=self.x_range, size=(self.n, self.d - 1)), mask_family)
         x = self._project_onto(self._make_related(x))
         y = self.func(x, w, b) + np.random.normal(scale=self.std, size=(self.n, 1))
 

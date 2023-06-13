@@ -6,8 +6,6 @@ from jlt import jlt
 from jlt.jlt import *
 from kmeans_model import *
 from performance_categorizer import *
-import pandas as pd
-from scipy.io.arff import loadarff
 from health_news_parser import *
 
 n = 1000
