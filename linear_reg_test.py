@@ -12,30 +12,38 @@ from health_news_parser import *
 from linear_data_generator import *
 from regression_model import *
 from pandas_template import *
+from linear_data_gen_settings import *
+
+""" TEST SETTINGS """
+
+num_test_total = 10
 
 """ DATA GENERATION SETTINGS """
 
-n = 100
-d = 1000
-x_range = 10000
-coeff_range = 100
-std = 10
-sparsity = 0.99
-num_test_total = 10
+std_settings = [10, 100, 1000]
+sparsity_settings = [0, 0.3, 0.5, 0.7, 0.99]
+n_settings = [1000, 10000, 100000]
+d_settings = [1000, 10000, 100000]
+settings = [
+    (linear_data_gen_settings(n=n, d=d, x_range=10000, coeff_range=100, std=i, sparsity=j), f"output/lin_reg/{i}_{j}")
+    for i in std_settings
+    for j in sparsity_settings
+    for n in n_settings
+    for d in d_settings
+]
 
 """ DIM REDUC SETTINGS """
-
+eps = [0.05, 0.1, 0.3, 0.5, 0.9]
+des = [0.05, 0.1, 0.3]
+n_components_arr = [100, 1000, 2000]
+instance_nums = [j + (i * j) for i in range(len(eps)) for j in range(len(des))]
 ep = 0.9
 de = 0.1
 instance_num = 2
 n_components = 99
 
-svd_solver = "auto"
+svd_solver = "random"
 model = PCA(n_components=n_components, svd_solver=svd_solver)
-
-""" General Settings """
-
-output_path = f"output/lin_reg_{ep}_{de}_{instance_num}"
 
 """ FUNCS """
 
@@ -47,11 +55,14 @@ blank = dim_reduc_function("Nothing", lambda x: x, {}, instance_num)
 funcs = [ese_jlt, random_jlt, n_jlt, pca, blank]
 num_test_funcs = [10, 10, 10, 10, 1]
 
-for i in range(num_test_total):
-    reg = regression_model()
-    gen = linear_data_generator(n, d, x_range, coeff_range, std, sparsity)
-    data = gen.generate()
-    tester = performance_cat()
-    results = tester.performance_test_all(data, reg, funcs, num_test_funcs)
-    dataframe = inject_into_dataframe(results)
-    dataframe.to_csv(output_path, index=False, mode='a')
+for setting in settings:
+    lin_setting, output_path = setting
+    n, d, x_range, coeff_range, std, sparsity = lin_setting
+    for i in range(num_test_total):
+        reg = regression_model()
+        gen = linear_data_generator(n, d, x_range, coeff_range, std, sparsity)
+        data = gen.generate()
+        tester = performance_cat()
+        results = tester.performance_test_all(data, reg, funcs, num_test_funcs)
+        dataframe = inject_into_dataframe(results)
+        dataframe.to_csv(output_path, index=False, mode='a')
