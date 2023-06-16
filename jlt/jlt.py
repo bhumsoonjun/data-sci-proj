@@ -13,7 +13,6 @@ def jlt(data: np.ndarray, ep: float, de: float) -> np.ndarray:
     k = int(24 / ep ** 2 * np.log(1 / de))
     np.random.choice([1, 0, -1], p=[1/6, 2/3, 1/6], size=(d, k))
     proj_mat = 1/np.sqrt(k) * np.random.normal(size=(d, k))
-    print(np.linalg.matrix_rank(proj_mat), proj_mat.shape)
     return data @ proj_mat
 
 def jlt_r(data: np.ndarray, ep: float, de: float) -> np.ndarray:
@@ -22,7 +21,6 @@ def jlt_r(data: np.ndarray, ep: float, de: float) -> np.ndarray:
     density = 1/np.sqrt(k)
     s = 1/density
     proj_mat = np.sqrt(s/k) * np.random.choice([1, 0, -1], p=[1/(2*s),1 - 1/s, 1/(2*s)], size=(d, k))
-    print(np.linalg.matrix_rank(proj_mat), proj_mat.shape)
     return data @ proj_mat
 
 def jlt_ese(X, de: float, ep: float):
@@ -31,7 +29,6 @@ def jlt_ese(X, de: float, ep: float):
     h = np.random.choice(d, size=k, replace=True)
     sigma = np.random.choice([-1, 1], size=d)
     R = csr_matrix((sigma[h], (h, range(k))), shape=(d, k))
-    print(np.linalg.matrix_rank(R.toarray()), R.shape, R.count_nonzero())
     return np.sqrt(d/k) * X @ R
 
 def approx_bound(eps, n):

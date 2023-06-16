@@ -40,7 +40,9 @@ n_jlt = [dim_reduc_function("JL transform", lambda x: jlt(x, ep, de), {"ep": ep,
 pca = [pca_wrapper("PCA", lambda _: _,  {})]
 blank = [dim_reduc_function("Nothing", lambda x: x, {})]
 funcs = ese_jlt + random_jlt + n_jlt + pca + blank
-num_test_funcs = [num_test_each for i in range(len(eps) * len(des) * 3)] + [3] + [3]
+num_test_funcs = [num_test_each for i in range(len(eps) * len(des) * 3)] + [1] + [1]
+
+print(settings)
 
 for setting in settings:
     print(f"========= Settings = {setting} ==========")
