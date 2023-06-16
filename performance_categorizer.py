@@ -48,6 +48,7 @@ class performance_cat:
             print(f"==== Iter {i} ====")
             print(f"=== Applying Dimensionality Reduction: {dim_reduc_f.name} ===")
             print(f"=== Params: {dim_reduc_f.params} ===")
+            print(f"=== Data: {data.characterstics} ===")
             reduc, dim_reduc_time = self._time_proc(lambda: model.apply_dim_reduc(dim_reduc_f.f))
 
             print("=== Traning Model ===")
