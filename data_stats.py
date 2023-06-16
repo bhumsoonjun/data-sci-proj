@@ -1,6 +1,7 @@
-from typing import *
-import numpy as np
 from dataclasses import *
+from typing import *
+
+import numpy as np
 
 
 @dataclass(repr=True)

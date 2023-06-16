@@ -1,10 +1,10 @@
 import pandas as pd
+
 from test_result import *
 
 structure = {
     "name": [],
     "run_num": [],
-    "instance_num": [],
     "params": [],
     "reduction_time": [],
     "accuracy": [],
@@ -29,7 +29,6 @@ def get_blank_dataframe():
 def inject_into_dataframe(all_res: List[test_result]):
     name = [res.dim_reduc_method_name for res in all_res]
     run_num = [res.run_number for res in all_res]
-    instance_num = [res.instance_num for res in all_res]
     params = [res.dim_reduc_params for res in all_res]
     reduction_time = [res.dim_reduc_time for res in all_res]
     accuracy = [res.accuracy for res in all_res]
@@ -51,7 +50,6 @@ def inject_into_dataframe(all_res: List[test_result]):
 
     structure_copy["name"] = name
     structure_copy["run_num"] = run_num
-    structure_copy["instance_num"] = instance_num
     structure_copy["params"] = params
     structure_copy["reduction_time"] = reduction_time
     structure_copy["accuracy"] = accuracy

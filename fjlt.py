@@ -1,8 +1,9 @@
-import numpy as np
-import fht  # Fast hadamard transform. https://github.com/nbarbey/fht
-from scipy import sparse
-import numpy.random as npr
 import math
+
+import fht  # Fast hadamard transform. https://github.com/nbarbey/fht
+import numpy as np
+import numpy.random as npr
+from scipy import sparse
 
 
 def approx_bound(eps, n):

@@ -1,22 +1,19 @@
-from sklearn.decomposition import PCA
-
-from clusters_generator import *
-from dim_reduc_function import *
+from health_news_parser import *
 from jlt import jlt
 from jlt.jlt import *
-from kmeans_model import *
-from performance_categorizer import *
-import pandas as pd
-from scipy.io.arff import loadarff
-from health_news_parser import *
-from linear_data_generator import *
-from regression_model import *
-from pandas_template import *
 from linear_data_gen_settings import *
+from linear_data_generator import *
+from pandas_template import *
+from performance_categorizer import *
+from regression_model import *
+from sklearn.decomposition import PCA
+import torch
+print(torch.cuda.is_available())
 
 """ TEST SETTINGS """
 
-num_test_total = 10
+num_test_total = 3
+num_test_each = 3
 
 """ DATA GENERATION SETTINGS """
 
@@ -42,23 +39,25 @@ de = 0.1
 instance_num = 2
 n_components = 99
 
-svd_solver = "random"
+svd_solver = "randomized"
 model = PCA(n_components=n_components, svd_solver=svd_solver)
 
 """ FUNCS """
 
-ese_jlt = dim_reduc_function("extremely sparse JL transform", lambda x: jlt_ese(x, ep, de), {"ep": ep, "de": de}, instance_num)
-random_jlt = dim_reduc_function("sparse JL transform", lambda x: jlt_r(x, ep, de), {"ep": ep, "de": de}, instance_num)
-n_jlt = dim_reduc_function("JL transform", lambda x: jlt(x, ep, de), {"ep": ep, "de": de}, instance_num)
-pca = dim_reduc_function("PCA", lambda x: model.fit_transform(x),  {"n_components": n_components, "svd_solver": svd_solver}, instance_num)
-blank = dim_reduc_function("Nothing", lambda x: x, {}, instance_num)
-funcs = [ese_jlt, random_jlt, n_jlt, pca, blank]
-num_test_funcs = [10, 10, 10, 10, 1]
+ese_jlt = [dim_reduc_function("extremely sparse JL transform", lambda x: jlt_ese(x, ep, de), {"ep": ep, "de": de}) for ep in eps for de in des]
+random_jlt = [dim_reduc_function("sparse JL transform", lambda x: jlt_r(x, ep, de), {"ep": ep, "de": de}) for ep in eps for de in des]
+n_jlt = [dim_reduc_function("JL transform", lambda x: jlt(x, ep, de), {"ep": ep, "de": de}) for ep in eps for de in des]
+pca = [dim_reduc_function("PCA", lambda x: model.fit_transform(x),  {"n_components": n_components, "svd_solver": svd_solver}) for n_components in n_components_arr]
+blank = [dim_reduc_function("Nothing", lambda x: x, {})]
+funcs = ese_jlt + random_jlt + n_jlt + pca + blank
+num_test_funcs = [num_test_each for i in range(len(eps) * len(des) * 3)] + [3 for i in range(len(n_components_arr))] + [3]
 
 for setting in settings:
+    print(f"========= Settings = {setting} ==========")
     lin_setting, output_path = setting
-    n, d, x_range, coeff_range, std, sparsity = lin_setting
+    n, d, x_range, coeff_range, std, sparsity = lin_setting.n, lin_setting.d, lin_setting.x_range, lin_setting.coeff_range, lin_setting.std, lin_setting.sparsity
     for i in range(num_test_total):
+        print(f"========= Test No = {i} ==========")
         reg = regression_model()
         gen = linear_data_generator(n, d, x_range, coeff_range, std, sparsity)
         data = gen.generate()

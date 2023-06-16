@@ -1,16 +1,14 @@
-import pandas as pd
-from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
-from sklearn.cluster import KMeans
-from matplotlib import pyplot as plt
-import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-import os
 import functools
-import numpy_indexed as npi
+import os
 
+import numpy as np
+import numpy_indexed as npi
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
 
 from performance_test_data import performance_test_data
+
 
 def load_health_news(num_news):
     path = 'data/health+news+in+twitter/Health-Tweets'
@@ -31,6 +29,7 @@ def load_health_news(num_news):
     aggregated_df = pd.concat(dfs)
     vectorizer = TfidfVectorizer(stop_words={'english'})
     X = vectorizer.fit_transform(aggregated_df).toarray()
+    print(vectorizer.get_feature_names())
 
     lens = np.array([0] + lens)
     prefix = lens.cumsum()

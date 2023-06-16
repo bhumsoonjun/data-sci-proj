@@ -1,4 +1,3 @@
-from typing import *
 import numpy as np
 
 class performance_test_data:

@@ -1,7 +1,9 @@
-from typing import *
-import numpy as np
 from performance_test_data import *
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split
+
+from performance_test_data import *
+
 
 class linear_data_generator:
 

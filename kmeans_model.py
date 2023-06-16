@@ -1,10 +1,13 @@
-from typing import *
-import numpy as np
 import sklearn as sk
 import sklearn.cluster
 
-from performance_test_data import *
 from performance_test_model import *
+import sklearn as sk
+import sklearn.cluster
+
+from performance_test_model import *
+
+
 class kmeans_model(performance_test_model):
 
     def __init__(self):

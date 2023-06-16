@@ -1,5 +1,3 @@
-from typing import *
-import numpy as np
 from performance_test_data import *
 
 class clusters_generator:

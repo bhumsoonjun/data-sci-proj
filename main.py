@@ -1,12 +1,9 @@
-from sklearn.decomposition import PCA
-
-from clusters_generator import *
-from dim_reduc_function import *
+from health_news_parser import *
 from jlt import jlt
 from jlt.jlt import *
 from kmeans_model import *
 from performance_categorizer import *
-from health_news_parser import *
+from sklearn.decomposition import PCA
 
 n = 1000
 d = 10000
@@ -37,6 +34,7 @@ n_jlt = dim_reduc_function("JL transform", lambda x: jlt(x, reduc_k), {"ep": ep,
 pca = dim_reduc_function("PCA", lambda x: model.fit_transform(x),  {"n_components": n_components, "svd_solver": svd_solver})
 
 funcs = [ese_jlt, random_jlt, n_jlt, pca]
+num_test_funcs = [1, 1, 1, 1]
 
 """ MODEL """
 
@@ -48,8 +46,8 @@ kmeans = kmeans_model()
 
 performance_test_data = load_health_news(3)
 
-tester = performance_cat(num_test)
-results = tester.performance_test_all(performance_test_data, kmeans, funcs)
+tester = performance_cat()
+results = tester.performance_test_all(performance_test_data, kmeans, funcs, num_test_funcs)
 
 for res in results:
     print(res)

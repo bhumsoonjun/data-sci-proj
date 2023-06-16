@@ -1,5 +1,5 @@
 import numpy as np
-from typing import *
+
 
 def measure_error(original: np.ndarray, processed: np.ndarray):
     n, m = original.shape

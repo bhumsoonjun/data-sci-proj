@@ -1,11 +1,7 @@
-from dataclasses import dataclass
-import numpy as np
-from typing import *
 from data_stats import *
 @dataclass(init=True, repr=True)
 class test_result:
     run_number: int
-    instance_num: int
 
     dim_reduc_method_name: str
     dim_reduc_params: Dict[str, Any]

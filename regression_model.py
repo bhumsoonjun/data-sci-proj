@@ -1,10 +1,12 @@
-from typing import *
-import numpy as np
 import sklearn as sk
 import sklearn.cluster
 
-from performance_test_data import *
 from performance_test_model import *
+import sklearn as sk
+import sklearn.cluster
+
+from performance_test_model import *
+
 
 class regression_model(performance_test_model):
 
