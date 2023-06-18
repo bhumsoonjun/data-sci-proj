@@ -8,6 +8,16 @@ from performance_categorizer import *
 from regression_model import *
 from sklearn.decomposition import PCA
 from pca_wrapper import *
+from health_news_parser import *
+from jlt import jlt
+from jlt.jlt import *
+from linear_data_gen_settings import *
+from linear_data_generator import *
+from pandas_template import *
+from performance_categorizer import *
+from regression_model import *
+from sklearn.decomposition import PCA
+from pca_wrapper import *
 
 """ TEST SETTINGS """
 
@@ -20,13 +30,15 @@ std_settings = [100]
 sparsity_settings = [0, 0.3, 0.5, 0.7, 0.99]
 n_settings = [1000, 10000, 100000]
 d_settings = [1000, 10000, 100000]
+n_d_settings = [(i, j) for i in n_settings for j in d_settings][:-1]
 settings = [
     (linear_data_gen_settings(n=n, d=d, x_range=10000, coeff_range=100, std=i, sparsity=j), f"output/lin_reg/{i}_{j}")
     for i in std_settings
     for j in sparsity_settings
-    for n in n_settings
-    for d in d_settings
+    for n,d in n_d_settings
 ]
+
+print(settings)
 
 """ DIM REDUC SETTINGS """
 eps = [0.05, 0.1, 0.5, 0.9]
