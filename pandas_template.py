@@ -7,6 +7,7 @@ structure = {
     "run_num": [],
     "params": [],
     "reduction_time": [],
+    "train_time": [],
     "accuracy": [],
     "original_std_sum": [],
     "original_std_mean": [],
@@ -31,6 +32,7 @@ def inject_into_dataframe(all_res: List[test_result]):
     run_num = [res.run_number for res in all_res]
     params = [res.dim_reduc_params for res in all_res]
     reduction_time = [res.dim_reduc_time for res in all_res]
+    train_time = [res.train_time for res in all_res]
     accuracy = [res.accuracy for res in all_res]
     original_std_sum = [res.original_data_stats.stds_sum for res in all_res]
     original_std_mean = [res.original_data_stats.stds_mean for res in all_res]
@@ -52,6 +54,7 @@ def inject_into_dataframe(all_res: List[test_result]):
     structure_copy["run_num"] = run_num
     structure_copy["params"] = params
     structure_copy["reduction_time"] = reduction_time
+    structure_copy["train_time"] = train_time
     structure_copy["accuracy"] = accuracy
     structure_copy["original_std_sum"] = original_std_sum
     structure_copy["original_std_mean"] = original_std_mean

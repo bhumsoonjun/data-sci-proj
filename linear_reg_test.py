@@ -68,4 +68,4 @@ for setting in settings:
         tester = performance_cat()
         results = tester.performance_test_all(data, reg, funcs, num_test_funcs)
         dataframe = inject_into_dataframe(results)
-        dataframe.to_csv(output_path, index=False, mode='a')
+        dataframe.to_csv(output_path, index=False, mode='a', header= not pathlib.Path(output_path).exists())

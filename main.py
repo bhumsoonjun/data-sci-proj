@@ -8,13 +8,14 @@ from pca_wrapper import pca_wrapper
 from performance_categorizer import *
 from sklearn.decomposition import PCA
 from cluster_data_gen_settings import *
+import pathlib
 
 """ TEST SETTINGS """
 
 num_test_total = 1
 num_test_each = 1
 
-std_settings = [10., 100, 1000]
+std_settings = [10., 100, 500, 1000]
 sparsity_settings = [0, 0.3, 0.5, 0.7, 0.99]
 n_settings = [1000, 10000, 50000]
 d_settings = [1000, 10000, 50000]
@@ -58,4 +59,4 @@ for setting in settings:
         tester = performance_cat()
         results = tester.performance_test_all(data, km, funcs, num_test_funcs)
         dataframe = inject_into_dataframe(results)
-        dataframe.to_csv(output_path, index=False, mode='a')
+        dataframe.to_csv(output_path, index=False, mode='a', header= not pathlib.Path(output_path).exists())
