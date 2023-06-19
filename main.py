@@ -22,7 +22,7 @@ n_d_settings = [(i, j) for i in n_settings for j in d_settings][:-1]
 a_b_settings = [(-100, 100), (-500, 500), (-1000, 1000)]
 num_clusters = [5, 10, 20]
 settings = [
-    (cluster_data_gen_settings(n=n, d=d, a=a, b=b, std=std, num_clusters=k, num_test_per_cluster=10, sparsity=spa), f"output/kmeans/{std}_{spa}_{(a, b)}")
+    (cluster_data_gen_settings(n=n, d=d, a=a, b=b, std=std, num_clusters=k, num_test_per_cluster=10, sparsity=spa), f"output/kmeans/smaller/{std}_{spa}_{(a, b)}")
     for std in std_settings
     for spa in sparsity_settings
     for n,d in n_d_settings
