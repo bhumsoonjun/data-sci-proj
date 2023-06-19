@@ -1,10 +1,4 @@
-import sklearn as sk
-import sklearn.cluster
-
-from performance_test_model import *
-import sklearn as sk
-import sklearn.cluster
-from faiss_k_nbr import faiss_kmeans
+from sklearn.cluster import MiniBatchKMeans
 from performance_test_model import *
 
 
@@ -19,7 +13,7 @@ class kmeans_model(performance_test_model):
         self.n = None
         self.num_cluster = None
         self.n_test_per_cluster = None
-        self.model: faiss_kmeans = None
+        self.model: MiniBatchKMeans = None
 
         self.reduc_clusters_train = None
         self.reduc_clusters_means = None
@@ -34,7 +28,7 @@ class kmeans_model(performance_test_model):
         self.n = self.clusters_train.shape[0]
         self.num_cluster = self.clusters_means.shape[0]
         self.n_test_per_cluster = self.clusters_test.shape[0] // self.num_cluster
-        self.model: faiss_kmeans = faiss_kmeans(n_clusters=self.num_cluster)
+        self.model: MiniBatchKMeans = MiniBatchKMeans(n_clusters=self.num_cluster)
 
         self.reduc_clusters_train = None
         self.reduc_clusters_means = None
