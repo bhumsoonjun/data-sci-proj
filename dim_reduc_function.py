@@ -1,7 +1,10 @@
-from abc import ABC
+from dataclasses import dataclass
+from typing import *
 
-
-class dim_reduc_function(ABC):
+@dataclass(repr=True)
+class dim_reduc_function:
+    name: str
+    params: dict
 
     def __init__(self, name, f, params: dict):
         self.name: str = name

@@ -31,9 +31,11 @@ class regression_model(performance_test_model):
         self.n, self.d = self.train_data.shape
         self.model: sklearn.linear_model.LinearRegression = sk.linear_model.LinearRegression()
 
+        self.compact_data = np.concatenate((self.train_data, self.test_data))
+
 
     def apply_dim_reduc(self, dim_reduc_f) -> np.ndarray:
-        reduc = dim_reduc_f(np.concatenate((self.train_data, self.test_data)))
+        reduc = dim_reduc_f(self.compact_data)
         self.reduc_train_data = reduc[:self.n, :]
         self.reduc_test_data = reduc[self.n:, :]
         return reduc

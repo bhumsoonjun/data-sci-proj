@@ -34,8 +34,10 @@ class kmeans_model(performance_test_model):
         self.reduc_clusters_means = None
         self.reduc_clusters_test = None
 
+        self.compact_data = np.concatenate((self.clusters_train, self.clusters_test, self.clusters_means))
+
     def apply_dim_reduc(self, dim_reduc_f) -> np.ndarray:
-        reduc = dim_reduc_f(np.concatenate((self.clusters_train, self.clusters_test, self.clusters_means)))
+        reduc = dim_reduc_f(self.compact_data)
         self.reduc_clusters_train = reduc[:self.n, :]
         self.reduc_clusters_test = reduc[self.n:self.n + self.clusters_test.shape[0],:]
         self.reduc_clusters_means = reduc[self.n + self.clusters_test.shape[0]:, :]

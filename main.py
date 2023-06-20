@@ -1,12 +1,10 @@
 from clusters_generator import clusters_generator
-from health_news_parser import *
-from jlt import jlt
+
 from jlt.jlt import *
 from kmeans_model import *
 from pandas_template import inject_into_dataframe
 from pca_wrapper import pca_wrapper
 from performance_categorizer import *
-from sklearn.decomposition import PCA
 from cluster_data_gen_settings import *
 import pathlib
 
@@ -37,13 +35,17 @@ des = [0.05, 0.1]
 
 """ FUNCS """
 
-ese_jlt = [dim_reduc_function("extremely sparse JL transform", lambda x: jlt_ese(x, ep, de), {"ep": ep, "de": de}) for ep in eps for de in des]
-random_jlt = [dim_reduc_function("sparse JL transform", lambda x: jlt_r(x, ep, de), {"ep": ep, "de": de}) for ep in eps for de in des]
-n_jlt = [dim_reduc_function("JL transform", lambda x: jlt(x, ep, de), {"ep": ep, "de": de}) for ep in eps for de in des]
+print([(ep, de) for ep in eps for de in des])
+
+ese_jlt = [jlt_ese("extremely sparse JL transform", ep, de, {"ep": ep, "de": de}) for ep in eps for de in des]
+random_jlt = [jlt_r("sparse JL transform", ep, de, {"ep": ep, "de": de}) for ep in eps for de in des]
+n_jlt = [jlt("JL transform", ep, de, {"ep": ep, "de": de}) for ep in eps for de in des]
 pca = [pca_wrapper("PCA", lambda _: _,  {})]
 blank = [dim_reduc_function("Nothing", lambda x: x, {})]
-funcs =  pca + blank
-num_test_funcs = [num_test_each for i in range(len(eps) * len(des) * 3)] + [num_test_each] + [num_test_each]
+funcs = ese_jlt + random_jlt + n_jlt + pca + blank
+num_test_funcs = [num_test_each for i in range(len(ese_jlt) + len(random_jlt) + len(n_jlt))] + [num_test_each] + [num_test_each]
+
+print(ese_jlt)
 
 """ DATA """
 

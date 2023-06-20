@@ -45,16 +45,8 @@ class performance_cat:
         model.initialize(data)
 
         for i in range(num_test):
-            print(f"==== Iter {i} ====")
-            print(f"=== Applying Dimensionality Reduction: {dim_reduc_f.name} ===")
-            print(f"=== Params: {dim_reduc_f.params} ===")
-            print(f"=== Data: {data.characterstics} ===")
-            reduc, dim_reduc_time = self._time_proc(lambda: model.apply_dim_reduc(dim_reduc_f.f))
-
-            print("=== Traning Model ===")
+            reduc, dim_reduc_time = self._time_proc(lambda: model.apply_dim_reduc(dim_reduc_f.apply))
             _, train_time = self._time_proc(lambda: model.train())
-
-            print("=== Computing Accuracy ===")
             all_accuracy.append(model.compute_accuracy())
             all_dim_reduc_time.append(dim_reduc_time)
             all_train_time.append(train_time)

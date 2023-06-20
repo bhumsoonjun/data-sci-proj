@@ -21,6 +21,7 @@ structure = {
     "transformed_std_max": [],
     "transformed_std_min": [],
     "transformed_sparsity": [],
+    "transformed_shape": [],
     "characteristics": []
 }
 
@@ -46,6 +47,7 @@ def inject_into_dataframe(all_res: List[test_result]):
     transformed_std_max = [res.transformed_data_stats.std_max for res in all_res]
     transformed_std_min = [res.transformed_data_stats.std_min for res in all_res]
     transformed_sparsity = [res.transformed_data_stats.sparsity for res in all_res]
+    transformed_shape = [res.transformed_data_stats.shape for res in all_res]
     characteristics = [res.characteristics for res in all_res]
 
     structure_copy = structure.copy()
@@ -68,6 +70,7 @@ def inject_into_dataframe(all_res: List[test_result]):
     structure_copy["transformed_std_max"] = transformed_std_max
     structure_copy["transformed_std_min"] = transformed_std_min
     structure_copy["transformed_sparsity"] = transformed_sparsity
+    structure_copy["transformed_shape"] = transformed_shape
     structure_copy["characteristics"] = characteristics
 
     return pd.DataFrame(structure_copy)
