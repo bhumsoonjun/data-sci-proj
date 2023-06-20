@@ -18,7 +18,7 @@ class jlt(dim_reduc_function):
 
     def apply(self, data):
         self.n, self.d = data.shape
-        self.k = int(24 / self.ep ** 2 * np.log(1 / self.de))
+        self.k = int(12 / self.ep ** 2 * np.log(1 / self.de))
         proj_mat = 1/np.sqrt(self.k) * np.random.normal(size=(self.d, self.k))
         return data @ proj_mat
 
@@ -30,7 +30,7 @@ class jlt_r(dim_reduc_function):
 
     def apply(self, data):
         self.n, self.d = data.shape
-        self.k = int(24 / self.ep ** 2 * np.log(1 / self.de))
+        self.k = int(12 / self.ep ** 2 * np.log(1 / self.de))
         density = 1/np.sqrt(self.k)
         s = 1/density
         proj_mat = np.sqrt(s/self.k) * np.random.choice([1, 0, -1], p=[1/(2*s),1 - 1/s, 1/(2*s)], size=(self.d, self.k))
