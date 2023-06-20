@@ -4,12 +4,14 @@ import numpy as np
 
 from dim_reduc_function import *
 from sklearn.decomposition import PCA
+from dataclasses import dataclass
 
+@dataclass(repr=True)
 class pca_wrapper(dim_reduc_function):
 
     def __init__(self, name, f, params: dict):
         self.name: str = name
-        self.f = f
+        self.f = self.apply
         self.params = params
 
     def apply(self, data: np.ndarray):
