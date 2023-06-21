@@ -15,6 +15,7 @@ structure = {
     "original_std_max": [],
     "original_std_min": [],
     "original_sparsity": [],
+    "original_shape": [],
     "transformed_std_sum": [],
     "transformed_std_mean": [],
     "transformed_std_median": [],
@@ -41,6 +42,7 @@ def inject_into_dataframe(all_res: List[test_result]):
     original_std_max = [res.original_data_stats.std_max for res in all_res]
     original_std_min = [res.original_data_stats.std_min for res in all_res]
     original_sparsity = [res.original_data_stats.sparsity for res in all_res]
+    original_shape = [res.original_data_stats.shape for res in all_res]
     transformed_std_sum = [res.transformed_data_stats.stds_sum for res in all_res]
     transformed_std_mean = [res.transformed_data_stats.stds_mean for res in all_res]
     transformed_std_median = [res.transformed_data_stats.stds_median for res in all_res]
@@ -64,6 +66,7 @@ def inject_into_dataframe(all_res: List[test_result]):
     structure_copy["original_std_max"] = original_std_max
     structure_copy["original_std_min"] = original_std_min
     structure_copy["original_sparsity"] = original_sparsity
+    structure_copy["original_shape"] = original_shape
     structure_copy["transformed_std_sum"] = transformed_std_sum
     structure_copy["transformed_std_mean"] = transformed_std_mean
     structure_copy["transformed_std_median"] = transformed_std_median
