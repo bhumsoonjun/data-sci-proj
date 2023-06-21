@@ -15,9 +15,9 @@ num_test_each = 1
 
 std_settings = [100, 500, 1000]
 sparsity_settings = [0, 0.33, 0.66, 0.99]
-n_settings = [1000, 10000, 50000]
-d_settings = [1000, 10000, 50000]
-n_d_settings = [(i, j) for i in n_settings for j in d_settings][:-1]
+n_settings = [1000, 10000, 30000]
+d_settings = [1000, 10000, 30000]
+n_d_settings = [(i, j) for i in n_settings for j in d_settings]
 a_b_settings = [(-100, 100), (-500, 500), (-1000, 1000)]
 num_clusters = [10]
 settings = [
