@@ -27,9 +27,8 @@ def load_health_news(num_news):
             cnt += 1
 
     aggregated_df = pd.concat(dfs)
-    vectorizer = TfidfVectorizer(stop_words={'english'})
+    vectorizer = TfidfVectorizer(stop_words=['english'])
     X = vectorizer.fit_transform(aggregated_df).toarray()
-    print(vectorizer.get_feature_names())
 
     lens = np.array([0] + lens)
     prefix = lens.cumsum()
