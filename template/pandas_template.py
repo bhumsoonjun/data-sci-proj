@@ -3,6 +3,9 @@ import pandas as pd
 from . import test_result
 from typing import *
 
+"""
+Template class for outputing to dataframe
+"""
 structure = {
     "name": [],
     "run_num": [],

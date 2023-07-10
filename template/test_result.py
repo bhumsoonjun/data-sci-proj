@@ -1,6 +1,10 @@
 from . import data_stats
 from dataclasses import dataclass
 from typing import *
+
+"""
+A dataclass for collecting test results. Collected results are defined below.
+"""
 @dataclass(init=True, repr=True)
 class test_result:
     run_number: int

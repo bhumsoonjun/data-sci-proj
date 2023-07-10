@@ -7,7 +7,9 @@ import sklearn.cluster
 
 from performance_test_model import *
 
-
+"""
+Implementation of regression model. Inherits the abstract class performance_test_model and implement it methods.
+"""
 class regression_model(performance_test_model):
 
     def __init__(self):

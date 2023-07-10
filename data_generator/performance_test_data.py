@@ -1,5 +1,8 @@
 import numpy as np
 
+"""
+A class for holding testing data.
+"""
 class performance_test_data:
 
     def __init__(self, training_data, training_label, testing_data, testing_label, characteristics: dict = None):

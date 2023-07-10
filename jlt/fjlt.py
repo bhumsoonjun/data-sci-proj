@@ -6,6 +6,11 @@ import numpy.random as npr
 from scipy import sparse
 
 
+"""
+FHT Implementation from https://github.com/michaelmathen/FJLT
+"""
+
+
 def approx_bound(eps, n):
     return int(2 / eps ** 2 * math.log(n) + 1.0)
 

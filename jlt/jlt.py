@@ -4,6 +4,10 @@ import numpy.random as npr
 
 from template.dim_reduc_function import dim_reduc_function
 
+"""
+Implementation of each JL transform variants. 
+The details of each algorithm and analysis are all in the cited papers.
+"""
 
 class jlt(dim_reduc_function):
     def __init__(self, name, ep: float, de: float, params: dict):

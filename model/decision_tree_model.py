@@ -1,6 +1,9 @@
 from performance_test_model import *
 from sklearn.ensemble import RandomForestClassifier
 
+"""
+Implementation of decision tree model. Inherits the abstract class performance_test_model and implement it methods.
+"""
 class decison_tree_model(performance_test_model):
 
     def __init__(self):

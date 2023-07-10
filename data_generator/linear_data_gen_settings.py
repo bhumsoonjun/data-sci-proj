@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 
+"""
+A dataclass for holding data generation setting for linear data type.
+"""
 @dataclass(repr=True)
 class linear_data_gen_settings:
     n: int

@@ -3,7 +3,9 @@ from . import performance_test_model
 from data_generator import performance_test_data
 import numpy as np
 
-
+"""
+Implementation of kmeans model. Inherits the abstract class performance_test_model and implement it methods.
+"""
 class kmeans_model(performance_test_model.performance_test_model):
 
     def __init__(self):

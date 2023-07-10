@@ -3,7 +3,10 @@ from typing import *
 
 import numpy as np
 
-
+"""
+Dataclass representation of statistics collected from data.
+The init method takes in an array and collect statistics on the data.
+"""
 @dataclass(repr=True)
 class data_stats:
 

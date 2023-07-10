@@ -4,7 +4,9 @@ from sklearn.model_selection import train_test_split
 
 from performance_test_data import *
 
-
+"""
+A linear data generator. Generate linear data data based on the given parameters.
+"""
 class linear_data_generator:
 
     def __init__(

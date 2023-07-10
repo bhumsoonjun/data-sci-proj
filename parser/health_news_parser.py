@@ -12,13 +12,19 @@ from data_generator.performance_test_data import performance_test_data
 subs = {"bbc", "cbc", "cnn", "everydayhealth", "fox", "gdn", "good", "kaiser", "latimes", "msn", "nbc", "npr",
         "nytimes", "reuters", "usnews", "wsj"}
 
+
+"""
+Parser for news data. Two main methods, load_health_news_for_decision_tree and load_health_news_for_kmeans.
+We separate because each model requires different data inputs.
+"""
+
 def replace_in_list(x: str) -> str:
     st = x
     for s in subs:
         st = st.replace(s, '')
     return st
 
-def load_health_news(num_news, path):
+def load_health_news_for_kmeans(num_news, path):
     dfs = []
     lens = []
     names = []

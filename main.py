@@ -47,7 +47,7 @@ num_test_funcs = [num_test_each for i in range(len(ese_jlt) + len(random_jlt) + 
 
 print(ese_jlt)
 
-""" DATA """
+""" MAIN LOOP """
 
 for setting in settings:
     print(f"========= Settings = {setting} ==========")

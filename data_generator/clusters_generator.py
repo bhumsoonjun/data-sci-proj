@@ -2,6 +2,9 @@ from . import performance_test_data
 import numpy as np
 from model.performance_test_model import *
 
+"""
+A cluster generator. Generate cluster data based on the given parameters.
+"""
 class clusters_generator:
 
     def __init__(

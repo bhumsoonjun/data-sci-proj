@@ -1,6 +1,10 @@
 from dataclasses import dataclass
 from typing import *
 
+
+"""
+An abstraction for dimensionality reduction algorithm classes
+"""
 @dataclass(repr=True)
 class dim_reduc_function:
     name: str

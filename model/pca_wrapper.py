@@ -4,6 +4,10 @@ from template.dim_reduc_function import *
 from sklearn.decomposition import PCA
 from dataclasses import dataclass
 
+"""
+A wrapper class for PCA. This is to make it conform with other dimensionality reduction algorithm.
+Also goes with adapter design pattern to wrap another functionality and convert it to similar signature for OOP purposes.
+"""
 @dataclass(repr=True)
 class pca_wrapper(dim_reduc_function):
 

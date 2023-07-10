@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 
+"""
+A dataclass for holding data generation setting for cluster data type.
+"""
 @dataclass(repr=True)
 class cluster_data_gen_settings:
     n: int

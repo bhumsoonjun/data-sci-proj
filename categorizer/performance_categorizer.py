@@ -7,7 +7,11 @@ from template.dim_reduc_function import *
 from model.performance_test_model import *
 from template.test_result import test_result
 
-
+"""
+Performance categorizer class which is the main flow of our test. 
+This class will be use to host the data and model. 
+The class will run through each data settings and test each model on each algorithm.
+"""
 class performance_cat:
 
     def _rescale(self, data: np.ndarray):
