@@ -1,13 +1,8 @@
-import numpy as np
-import numpy as np
 from scipy.sparse import csr_matrix
 import numpy as np
-from scipy import sparse
 import numpy.random as npr
-import math
-from scipy.linalg import null_space
 
-from dim_reduc_function import dim_reduc_function
+from template.dim_reduc_function import dim_reduc_function
 
 
 class jlt(dim_reduc_function):

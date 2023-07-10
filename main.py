@@ -1,11 +1,11 @@
-from clusters_generator import clusters_generator
+from data_generator.clusters_generator import clusters_generator
 
 from jlt.jlt import *
-from kmeans_model import *
-from pandas_template import inject_into_dataframe
-from pca_wrapper import pca_wrapper
-from performance_categorizer import *
-from cluster_data_gen_settings import *
+from model.kmeans_model import *
+from template.pandas_template import inject_into_dataframe
+from model.pca_wrapper import pca_wrapper
+from categorizer.performance_categorizer import *
+from data_generator.cluster_data_gen_settings import *
 import pathlib
 
 """ TEST SETTINGS """
@@ -21,7 +21,7 @@ n_d_settings = [(i, j) for i in n_settings for j in d_settings]
 a_b_settings = [(-100, 100), (-500, 500), (-1000, 1000)]
 num_clusters = [10]
 settings = [
-    (cluster_data_gen_settings(n=n, d=d, a=a, b=b, std=std, num_clusters=k, num_test_per_cluster=10, sparsity=spa), f"output/kmeans/{std}_{spa}_{(a, b)}")
+    (cluster_data_gen_settings(n=n, d=d, a=a, b=b, std=std, num_clusters=k, num_test_per_cluster=10, sparsity=spa), f"output/kmeans/{std}_{spa}_{(a, b)}11")
     for std in std_settings
     for spa in sparsity_settings
     for n,d in n_d_settings

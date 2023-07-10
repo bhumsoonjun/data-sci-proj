@@ -1,25 +1,12 @@
 import pathlib
 
-from health_news_parser import *
-from jlt import jlt
 from jlt.jlt import *
-from linear_data_gen_settings import *
-from linear_data_generator import *
-from pandas_template import *
-from performance_categorizer import *
-from regression_model import *
-from sklearn.decomposition import PCA
-from pca_wrapper import *
-from health_news_parser import *
-from jlt import jlt
-from jlt.jlt import *
-from linear_data_gen_settings import *
-from linear_data_generator import *
-from pandas_template import *
-from performance_categorizer import *
-from regression_model import *
-from sklearn.decomposition import PCA
-from pca_wrapper import *
+from data_generator.linear_data_gen_settings import *
+from data_generator.linear_data_generator import *
+from template.pandas_template import *
+from categorizer.performance_categorizer import *
+from model.regression_model import *
+from model.pca_wrapper import *
 
 """ TEST SETTINGS """
 
